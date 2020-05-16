@@ -1022,9 +1022,9 @@ style information."
 
 (define-obsolete-variable-alias 'org-twbs-style 'org-twbs-head "24.4")
 (defcustom org-twbs-head "
-<link  href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css\" rel=\"stylesheet\">
-<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>
-<script src=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js\"></script>"
+<link  href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css\" rel=\"stylesheet\">
+<script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>
+<script src=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js\"></script>"
   "Org-wide head definitions for exported HTML files.
 
 As the value of this option simply gets inserted into the HTML
@@ -1313,6 +1313,7 @@ INFO is a plist used as a communication channel."
      (format
       (org-twbs-close-tag "meta" "charset=\"%s\"" info)
       charset) "\n"
+      "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />\n"
       "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
       "\n"
       (org-twbs-close-tag "meta" "name=\"generator\" content=\"Org-mode\"" info)
