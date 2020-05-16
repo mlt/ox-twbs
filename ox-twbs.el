@@ -775,7 +775,7 @@ See `format-time-string' for more information on its components."
 ;;;; Template :: Mathjax
 
 (defcustom org-twbs-mathjax-options
-  '((path  "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG")
+  '((path  "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_SVG")
     (scale "100")
     (dscale "100")
     (align "center")
