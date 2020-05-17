@@ -169,11 +169,9 @@
 $(function() {
     'use strict';
 
-    $('.bs-docs-sidebar li').first().addClass('active');
+    $('.bs-docs-sidebar li a').first().addClass('active');
 
     $(document.body).scrollspy({target: '.bs-docs-sidebar'});
-
-    $('.bs-docs-sidebar').affix();
 });
 </script>"
   "Basic JavaScript that is needed by HTML files produced by Org mode.")
@@ -192,7 +190,7 @@ body {
     margin-bottom: 105px;
 }
 
-footer {
+footer#postamble {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -200,11 +198,11 @@ footer {
     background-color: #f5f5f5;
 }
 
-footer > div {
+footer#postamble > div {
     padding: 10px;
 }
 
-footer p {
+footer#postamble p {
     margin: 0 0 5px;
     text-align: center;
     font-size: 16px;
@@ -213,6 +211,9 @@ footer p {
 #table-of-contents {
     margin-top: 20px;
     margin-bottom: 20px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 20px;
 }
 
 blockquote p {
@@ -236,9 +237,6 @@ figcaption {
 
 /* from twbs docs */
 
-.bs-docs-sidebar.affix {
-    position: static;
-}
 @media (min-width: 768px) {
     .bs-docs-sidebar {
         padding-left: 20px;
@@ -261,9 +259,9 @@ figcaption {
     background-color: transparent;
     border-left: 1px solid #A1283B;
 }
-.bs-docs-sidebar .nav > .active > a,
-.bs-docs-sidebar .nav > .active:hover > a,
-.bs-docs-sidebar .nav > .active:focus > a {
+.bs-docs-sidebar .nav > li > a.active,
+.bs-docs-sidebar .nav > li:hover > a.active,
+.bs-docs-sidebar .nav > li:focus > a.active {
     padding-left: 18px;
     font-weight: bold;
     color: #A1283B;
@@ -287,9 +285,9 @@ figcaption {
 .bs-docs-sidebar .nav .nav > li > a:focus {
     padding-left: 29px;
 }
-.bs-docs-sidebar .nav .nav > .active > a,
-.bs-docs-sidebar .nav .nav > .active:hover > a,
-.bs-docs-sidebar .nav .nav > .active:focus > a {
+.bs-docs-sidebar .nav .nav > li > a.active,
+.bs-docs-sidebar .nav .nav > li:hover > a.active,
+.bs-docs-sidebar .nav .nav > li:focus > a.active {
     padding-left: 28px;
     font-weight: 500;
 }
@@ -309,40 +307,17 @@ figcaption {
 .bs-docs-sidebar .nav .nav .nav > li > a:focus {
     padding-left: 39px;
 }
-.bs-docs-sidebar .nav .nav .nav > .active > a,
-.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
-.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
+.bs-docs-sidebar .nav .nav .nav > li > a.active,
+.bs-docs-sidebar .nav .nav .nav > li:hover > a.active,
+.bs-docs-sidebar .nav .nav .nav > li:focus > a.active {
     padding-left: 38px;
     font-weight: 500;
 }
 
 /* Show and affix the side nav when space allows it */
 @media (min-width: 992px) {
-    .bs-docs-sidebar .nav > .active > ul {
+    .bs-docs-sidebar .nav > li > a.active + ul {
         display: block;
-    }
-    /* Widen the fixed sidebar */
-    .bs-docs-sidebar.affix,
-    .bs-docs-sidebar.affix-bottom {
-        width: 213px;
-    }
-    .bs-docs-sidebar.affix {
-        position: fixed; /* Undo the static from mobile first approach */
-        top: 20px;
-    }
-    .bs-docs-sidebar.affix-bottom {
-        position: absolute; /* Undo the static from mobile first approach */
-    }
-    .bs-docs-sidebar.affix .bs-docs-sidenav,.bs-docs-sidebar.affix-bottom .bs-docs-sidenav {
-        margin-top: 0;
-        margin-bottom: 0
-    }
-}
-@media (min-width: 1200px) {
-    /* Widen the fixed sidebar again */
-    .bs-docs-sidebar.affix-bottom,
-    .bs-docs-sidebar.affix {
-        width: 263px;
     }
 }
 </style>"
@@ -1022,9 +997,9 @@ style information."
 
 (define-obsolete-variable-alias 'org-twbs-style 'org-twbs-head "24.4")
 (defcustom org-twbs-head "
-<link  href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css\" rel=\"stylesheet\">
+<link  href=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css\" rel=\"stylesheet\">
 <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>
-<script src=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js\"></script>"
+<script src=\"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js\"></script>"
   "Org-wide head definitions for exported HTML files.
 
 As the value of this option simply gets inserted into the HTML
@@ -1744,9 +1719,9 @@ and value is its relative level, as an integer."
              (setq prev-level level)
              (concat
               (org-twbs--make-string
-               times (cond ((> cnt 0) "\n<ul class=\"nav\">\n<li>")
+               times (cond ((> cnt 0) "\n<ul class=\"nav flex-column\">\n<li>")
                            ((< cnt 0) "</li>\n</ul>\n")))
-              (if (> cnt 0) "\n<ul class=\"nav\">\n<li>" "</li>\n<li>")))
+              (if (> cnt 0) "\n<ul class=\"nav flex-column\">\n<li>" "</li>\n<li>")))
            headline)))
       toc-entries "")
      (org-twbs--make-string (- prev-level start-level) "</li>\n</ul>\n"))))
@@ -1777,7 +1752,7 @@ INFO is a plist used as a communication channel."
          (tags (and (plist-get info :with-tags)
                     (plist-get info :with-toc-tags)
                     (org-export-get-tags headline info))))
-    (format "<a href=\"#%s\">%s</a>"
+    (format "<a class=\"nav-link\" href=\"#%s\">%s</a>"
             ;; Label.
             (or (org-element-property :CUSTOM_ID headline)
                 (concat "sec-"
@@ -2641,6 +2616,9 @@ the plist used as a communication channel."
                   "</span> " raw))))
             (label (org-element-property :name paragraph)))
         (org-twbs--wrap-image contents info caption label)))
+     ;; quote-block
+     ((eq (org-element-type parent) 'quote-block)
+      (format "<p class=\"mb-0\">\n%s</p>" contents))
      ;; Regular paragraph.
      (t (format "<p%s>\n%s</p>" extra contents)))))
 
@@ -2764,7 +2742,20 @@ information."
   "Transcode a QUOTE-BLOCK element from Org to HTML.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
-  (format "<blockquote>\n%s</blockquote>" contents))
+  (let* ((attr (org-export-read-attribute :attr_twbs quote-block))
+         (text (plist-get attr :text))
+         (who (plist-get attr :who))
+         (where (plist-get attr :where)))
+    (concat
+     "<blockquote class=\"blockquote" (if text " text-") text "\">\n"
+     contents
+     (if who
+         (concat
+          "<footer class=\"blockquote-footer\">"
+          who
+          (if where (format " in <cite title=\"%s\">%s</cite>\n" where where))
+          "</footer>\n"))
+     "</blockquote>\n")))
 
 ;;;; Quote Section
 
