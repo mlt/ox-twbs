@@ -42,11 +42,10 @@ text
 
 *** Quote blocks
 
+#+attr_twbs: :text center :who Abelson & Sussman :where SICP, preface to the first edition
 #+BEGIN_QUOTE
 Programs must be written for people to read, and only incidentally
 for machines to execute.
-
-/Abelson & Sussman, SICP, preface to the first edition/
 #+END_QUOTE
 
 *** Source code blocks
