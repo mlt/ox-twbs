@@ -1,0 +1,33 @@
+environment:
+  access_token:
+    secure: pR/CfKkATG5dbsaTAJS2WsKC+OBuli4eMe3hSylaNUMnvvjUEXmfIseZF+//1d/j
+
+install:
+  - choco upgrade emacs
+
+cache:
+  - C:\ProgramData\chocolatey\bin
+  - C:\ProgramData\chocolatey\lib
+  - c:/Users/appveyor/AppData/Roaming/.emacs.d/elpa
+
+build_script:
+  - emacs -Q -batch --script batch.el
+
+on_success:
+  - git config --global credential.helper store
+  - ps: Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:access_token):x-oauth-basic@github.com`n" -NoNewline
+  - git config --global user.email "mlt@users.noreply.github.com"
+  - git config --global user.name "AppVeyor worker"
+  - git checkout mlt
+  - git add example/eg0.html
+  - git commit -m "[skip ci] Update rendered example"
+  - git push
+  - git checkout --orphan gh-pages
+  - git rm -rf --cache .
+  - git add example/eg0.html
+  - git commit -m "Rendered example page"
+  - git push --force origin gh-pages
+
+
+on_failure:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
